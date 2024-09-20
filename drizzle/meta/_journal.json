@@ -15,6 +15,20 @@
       "when": 1726874095254,
       "tag": "0001_faithful_trish_tilby",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1726874363698,
+      "tag": "0002_slim_fallen_one",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1726874520851,
+      "tag": "0003_closed_masque",
+      "breakpoints": true
     }
   ]
 }
