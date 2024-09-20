@@ -1,12 +1,14 @@
 # restaurant-api
 
-To install dependencies:
+## Instalação
+
+Para instalar as dependências:
 
 ```bash
 bun install
 ```
 
-To run:
+Para rodar:
 
 ```bash
 bun run index.ts
