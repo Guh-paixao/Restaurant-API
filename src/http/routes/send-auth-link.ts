@@ -3,6 +3,8 @@ import { db } from "../../db/connection";
 import { authLinks, users } from "../../db/schema";
 import { createId } from "@paralleldrive/cuid2";
 import { env } from "../../env";
+import { mail } from "../../lib/mail";
+import nodemailer from 'nodemailer';
 
 
 
@@ -38,7 +40,16 @@ export const sendAuthLink = new Elysia().post('/authenticate', async ({ body }) 
     authLink.searchParams.set('code', authLinkCode)
     authLink.searchParams.set('redirect', env.AUTH_REDIRECT_URL)
 
-    console.log(authLink.toString())
+    const info = await mail.sendMail({
+        from: {
+            name: 'Restaurant API',
+            address: 'hi@restaurantAPI.com',
+        },
+        to: email,
+        subject: 'Authenticate to Restaurant account',
+        text: `Click on the link to authenticate: ${authLink.toString()}`,
+    })
+    console.log(nodemailer.getTestMessageUrl(info))
 
 }, {
     body: t.Object({
