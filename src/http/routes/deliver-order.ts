@@ -5,8 +5,8 @@ import { db } from '../../db/connection'
 import { orders } from '../../db/schema'
 import { eq } from 'drizzle-orm'
 
-export const approveOrder = new Elysia().use(auth).patch(
-  '/orders/:orderId/approve',
+export const deliverOrder = new Elysia().use(auth).patch(
+  '/orders/:orderId/deliver',
   async ({ getCurrentUser, set, params }) => {
     const { orderId } = params
     const { restauranteId } = await getCurrentUser()
@@ -30,15 +30,18 @@ export const approveOrder = new Elysia().use(auth).patch(
       return { message: 'Order not found.' }
     }
 
-    if (order.status !== 'pending') {
+    if (order.status !== 'delivering') {
       set.status = 400
 
-      return { message: 'You can only approve pending orders.' }
+      return {
+        message:
+          'You cannot deliver orders that are not in "delivering" status.',
+      }
     }
 
     await db
       .update(orders)
-      .set({ status: 'processing' })
+      .set({ status: 'delivered' })
       .where(eq(orders.id, orderId))
   },
   {

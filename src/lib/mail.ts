@@ -1,14 +1,14 @@
-import nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer'
 
-const account = await nodemailer.createTestAccount();
+const account = await nodemailer.createTestAccount()
 
 export const mail = nodemailer.createTransport({
-    host: account.smtp.host,
-    port: account.smtp.port,
-    secure: account.smtp.secure,
-    debug: true,
-    auth: {
-        user: account.user,
-        pass: account.pass,
-    },
+  host: account.smtp.host,
+  port: account.smtp.port,
+  secure: account.smtp.secure,
+  debug: true,
+  auth: {
+    user: account.user,
+    pass: account.pass,
+  },
 })

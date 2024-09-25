@@ -1,39 +1,32 @@
-import Elysia, { t } from "elysia";
-import { db } from "../../db/connection";
-import { authLinks, users } from "../../db/schema";
-import { createId } from "@paralleldrive/cuid2";
-import { env } from "../../env";
-import { mail } from "../../lib/mail";
-import nodemailer from 'nodemailer';
+import Elysia, { t } from 'elysia'
+import nodemailer from 'nodemailer'
+import { db } from '../../db/connection'
+import { createId } from '@paralleldrive/cuid2'
+import { authLinks } from '../../db/schema'
+import { env } from '../../env'
+import { mail } from '../../lib/mail'
 
-
-
-export const sendAuthLink = new Elysia().post('/authenticate', async ({ body }) => {
+export const sendAuthLink = new Elysia().post(
+  '/authenticate',
+  async ({ body }) => {
     const { email } = body
 
-    // 1º Verificar se há usuário com esse email
-    // 1º Forma
-    // const [userFromEmail] = await db.select().from(users).where(eq(users.email, email))
-
-    // 2º Forma
     const userFromEmail = await db.query.users.findFirst({
-        where(fields, { eq }) {
-            return eq(fields.email, email)
-        },
+      where(fields, { eq }) {
+        return eq(fields.email, email)
+      },
     })
 
     if (!userFromEmail) {
-        throw new Error('User not found.')
+      throw new Error('User not found')
     }
 
     const authLinkCode = createId()
 
     await db.insert(authLinks).values({
-        userId: userFromEmail.id,
-        code: authLinkCode,
+      userId: userFromEmail.id,
+      code: authLinkCode,
     })
-
-    // Enviar email com o link de autenticação
 
     const authLink = new URL('/auth-links/authenticate', env.API_BASE_URL)
 
@@ -41,18 +34,20 @@ export const sendAuthLink = new Elysia().post('/authenticate', async ({ body }) 
     authLink.searchParams.set('redirect', env.AUTH_REDIRECT_URL)
 
     const info = await mail.sendMail({
-        from: {
-            name: 'Restaurant API',
-            address: 'hi@restaurantAPI.com',
-        },
-        to: email,
-        subject: 'Authenticate to Restaurant account',
-        text: `Click on the link to authenticate: ${authLink.toString()}`,
+      from: {
+        name: 'Pizza Shop',
+        address: 'hi@pizzashop.com',
+      },
+      to: email,
+      subject: 'Authenticate to Pizza Shop',
+      text: `Use the following link to authenticate on Pizza Shop: ${authLink.toString()}`,
     })
-    console.log(nodemailer.getTestMessageUrl(info))
 
-}, {
+    console.log(nodemailer.getTestMessageUrl(info))
+  },
+  {
     body: t.Object({
-        email: t.String({ format: 'email' })
-    })
-})
+      email: t.String({ format: 'email' }),
+    }),
+  },
+)
