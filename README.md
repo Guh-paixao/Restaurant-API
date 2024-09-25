@@ -13,7 +13,7 @@ bun install
 Para rodar:
 
 ```bash
-bun run index.ts
+bun run dev
 ```
 ## Tecnologias Usadas
 
