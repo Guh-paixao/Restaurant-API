@@ -2,6 +2,8 @@
 
 API desenvolvida para o cadastro de restaurantes, usuários, administradores, pedidos e produtos, com um sistema de login seguro via magic link enviado por e-mail, eliminando a necessidade de senhas no banco de dados. Simples, segura e eficiente para o gerenciamento básico de restaurantes.
 
+(Feito para o curso de API com bun da RocketSeat.)
+
 ## Instalação
 
 Para instalar as dependências:
